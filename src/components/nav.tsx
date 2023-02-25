@@ -49,6 +49,34 @@ const StyledDiv = styled.div`
       }
     }
   }
+
+  @media only screen and (min-width: 280px) and (max-width: 677px) {
+    .nav {
+      padding: 1rem;
+
+      &__header {
+        font-size: 1rem;
+      }
+
+      &__icon {
+        span {
+          margin-left: 0.8rem;
+          font-weight: 500;
+          font-size: 1rem;
+        }
+
+        i {
+          font-size: 20px;
+        }
+      }
+    }
+  }
+
+  @media only screen and (min-width: 678px) and (max-width: 1024px) {
+    .nav {
+      padding: 2rem;
+    }
+  }
 `;
 
 export default Nav;

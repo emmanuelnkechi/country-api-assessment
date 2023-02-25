@@ -137,6 +137,49 @@ const StyledDiv = styled.div`
       }
     }
   }
+
+  @media only screen and (min-width: 280px) and (max-width: 677px) {
+    padding: 2rem 1rem;
+
+    .list {
+      &__countries {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem 1rem;
+        margin-top: 3rem;
+      }
+
+      &__search {
+        display: grid;
+        grid-template-columns: 1fr;
+
+        &--right-align {
+          margin-top: 1rem;
+          justify-self: left;
+          width: 50%;
+        }
+
+        input {
+          padding: 1rem;
+          width: 50%;
+          font-size: 0.8rem;
+        }
+      }
+    }
+  }
+
+  @media only screen and (min-width: 678px) and (max-width: 1024px) {
+    padding: 2rem;
+
+    .list {
+      &__countries {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 4rem 1rem;
+        margin-top: 4rem;
+      }
+    }
+  }
 `;
 
 export default Countries;
