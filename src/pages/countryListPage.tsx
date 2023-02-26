@@ -1,11 +1,20 @@
 import Countries from "../components/countries";
 import Nav from "../components/nav";
+import { ICountriesProp } from "../model/common.interface";
 
-const CountryListPage = () => {
+const CountryListPage = ({
+  countryList,
+  clickEvent,
+  theme,
+}: ICountriesProp) => {
   return (
     <>
-      <Nav />
-      <Countries />
+      <Nav clickEvent={clickEvent} theme={theme} />
+      <Countries
+        countryList={countryList}
+        clickEvent={clickEvent}
+        theme={theme}
+      />
     </>
   );
 };

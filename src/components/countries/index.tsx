@@ -1,9 +1,30 @@
+import React, { useEffect, useState } from "react";
 import Card from "../card";
 import styled from "styled-components";
+import { ICountry, ICountriesProp } from "../../model/common.interface";
+import Pagination from "../pagination";
 
-const Countries = () => {
+const Countries = ({ countryList, theme }: ICountriesProp) => {
+  const [itemOffset, setItemOffset] = useState(0);
+  const [currentItem, setCurrentItem] = useState([]);
+  const [pageCount, setPageCount] = useState(0);
+  const itemsPerPage = 12;
+  const endOffset = itemOffset + itemsPerPage;
+
+  useEffect(() => {
+    const currentItems = countryList.slice(itemOffset, endOffset);
+    setCurrentItem(currentItems);
+    const getPageCount = Math.ceil(countryList.length / itemsPerPage);
+    setPageCount(getPageCount);
+  }, [countryList, itemOffset]);
+
+  const handlePageClick = (event) => {
+    const newOffset = (event.selected * itemsPerPage) % countryList.length;
+    setItemOffset(newOffset);
+  };
+
   return (
-    <StyledDiv>
+    <StyledDiv theme={theme}>
       <div className="list">
         <div className="list__search">
           <input type="text" placeholder="Search for a country..." />
@@ -27,24 +48,31 @@ const Countries = () => {
         </div>
 
         <div className="list__countries">
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((country, index) => (
-            <Card />
+          {currentItem.map((country: { country: ICountry }, index: number) => (
+            <Card index={index} country={country} theme={theme} />
           ))}
         </div>
       </div>
+
+      <Pagination
+        pageCount={pageCount}
+        handlePageClick={handlePageClick}
+        theme={theme}
+      />
     </StyledDiv>
   );
 };
 
 const StyledDiv = styled.div`
   padding: 4rem 6rem;
+  background: ${(props) =>
+    props.theme === "light" ? "var(--primary-white)" : "var(--primary-dark)"};
 
   .list {
     &__countries {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr 1fr;
       gap: 4rem;
-      background: #fafafa;
       margin-top: 4rem;
     }
 
@@ -61,6 +89,14 @@ const StyledDiv = styled.div`
         border-radius: 0.5rem;
         padding: 16px;
         cursor: pointer;
+        background: ${(props) =>
+          props.theme === "light"
+            ? "var(--primary-color-light)"
+            : "var(--secondary-dark)"};
+        color: ${(props) =>
+          props.theme === "light"
+            ? "var(--primary-color-dark)"
+            : "var(--primary-color-dark)"};
 
         .dropbtn {
           font-size: 16px;
@@ -69,6 +105,14 @@ const StyledDiv = styled.div`
           font-weight: 500;
           outline: none;
           cursor: pointer;
+          background: ${(props) =>
+            props.theme === "light"
+              ? "var(--primary-color-light)"
+              : "var(--secondary-dark)"};
+          color: ${(props) =>
+            props.theme === "light"
+              ? "var(--primary-color-dark)"
+              : "var(--primary-color-dark)"};
         }
 
         i {
@@ -80,7 +124,10 @@ const StyledDiv = styled.div`
           display: none;
           position: absolute;
           top: 3.6rem;
-          background-color: #ffffff;
+          background: ${(props) =>
+            props.theme === "light"
+              ? "var(--primary-color-light)"
+              : "var(--secondary-dark)"};
           width: 100%;
           right: 0rem;
           box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
@@ -96,7 +143,14 @@ const StyledDiv = styled.div`
             font-size: 1rem;
             text-align: left;
             font-weight: 500;
-            background-color: #ffffff;
+            background: ${(props) =>
+              props.theme === "light"
+                ? "var(--primary-color-light)"
+                : "var(--secondary-dark)"};
+            color: ${(props) =>
+              props.theme === "light"
+                ? "var(--primary-color-dark)"
+                : "var(--primary-color-dark)"};
 
             :first-child {
               border-top-left-radius: 0.5rem;
@@ -110,7 +164,7 @@ const StyledDiv = styled.div`
 
             :hover {
               color: #fff;
-              background-color: #facf45;
+              background-color: #50b9e8;
             }
           }
         }
@@ -128,6 +182,14 @@ const StyledDiv = styled.div`
         border: none;
         box-shadow: 0px 1px 10px 0px rgba(147, 146, 146, 0.5);
         border-radius: 0.5rem;
+        background: ${(props) =>
+          props.theme === "light"
+            ? "var(--primary-color-light)"
+            : "var(--secondary-dark)"};
+        color: ${(props) =>
+          props.theme === "light"
+            ? "var(--primary-color-light)"
+            : "var(--primary-color-dark)"};
       }
 
       input::placeholder {

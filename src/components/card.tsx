@@ -1,30 +1,30 @@
 import styled from "styled-components";
-
 import Flag from "../assets/flag.png";
+import { ICountry, ICardProp } from "../model/common.interface";
 
-const Countries = () => {
+const Countries = ({ index, country, theme }: ICardProp) => {
   return (
-    <StyledCard>
+    <StyledCard key={index} theme={theme}>
       <div className="country">
         <div className="country__flag">
-          <img src={Flag} alt="flag" />
+          <img src={country?.flags?.png} alt="flag" />
         </div>
         <div className="country__info">
-          <h4>Germany</h4>
+          <h4>{country?.name?.common}</h4>
           <div className="country__country-details">
             <div>
               {" "}
-              <span>Population:</span> <span>81,770,900</span>
+              <span>Population:</span> <span>{country?.population}</span>
             </div>
 
             <div>
               {" "}
-              <span>Region:</span> <span>Europe</span>
+              <span>Region:</span> <span>{country?.region}</span>
             </div>
 
             <div>
               {" "}
-              <span>Capital:</span> <span>Berlin</span>
+              <span>Capital:</span> <span>{country?.capital}</span>
             </div>
           </div>
         </div>
@@ -34,11 +34,18 @@ const Countries = () => {
 };
 
 const StyledCard = styled.div`
-  background: #ffffff;
   border-radius: 0.5rem;
   box-shadow: -7px -5px 7px -1px rgba(224, 217, 217, 0.75);
   cursor: pointer;
   transition: all 0.2s ease-in-out;
+  background: ${(props) =>
+    props.theme === "light"
+      ? "var(--primary-color-light)"
+      : "var(--secondary-dark)"};
+  color: ${(props) =>
+    props.theme === "light"
+      ? "var(--primary-color-dark)"
+      : "var(--primary-color-dark)"};
 
   :hover {
     transform: scale(1.03);
@@ -46,8 +53,10 @@ const StyledCard = styled.div`
 
   .country {
     &__flag {
+      height: 10rem;
       img {
         width: 100%;
+        object-fit: cover;
         height: 100%;
         border-top-left-radius: 0.5rem;
         border-top-right-radius: 0.5rem;
