@@ -1,47 +1,73 @@
 import React, { useEffect, useState } from "react";
 import Card from "../card";
 import styled from "styled-components";
-import { ICountry, ICountriesProp } from "../../model/common.interface";
+import { ICountry } from "../../model/common.interface";
 import Pagination from "../pagination";
+import { CountryContext } from "../../context/countryContext";
+import { ThemeContext } from "../../context/themeContext";
 
-const Countries = ({ countryList, theme }: ICountriesProp) => {
+const Countries = () => {
   const [itemOffset, setItemOffset] = useState(0);
   const [currentItem, setCurrentItem] = useState([]);
   const [pageCount, setPageCount] = useState(0);
+  const [inputValue, setInputValue] = useState("");
+  const [selectValue, setSelectValue] = useState("");
   const itemsPerPage = 12;
   const endOffset = itemOffset + itemsPerPage;
 
+  const { countries, region, setSearchValue, setFilterValue } =
+    React.useContext(CountryContext);
+
+  const { theme } = React.useContext(ThemeContext);
+
   useEffect(() => {
-    const currentItems = countryList.slice(itemOffset, endOffset);
+    const currentItems = countries.slice(itemOffset, endOffset);
     setCurrentItem(currentItems);
-    const getPageCount = Math.ceil(countryList.length / itemsPerPage);
+    const getPageCount = Math.ceil(countries.length / itemsPerPage);
     setPageCount(getPageCount);
-  }, [countryList, itemOffset]);
+  }, [countries, itemOffset]);
 
   const handlePageClick = (event) => {
-    const newOffset = (event.selected * itemsPerPage) % countryList.length;
+    const newOffset = (event.selected * itemsPerPage) % countries.length;
     setItemOffset(newOffset);
+  };
+
+  const handleSearch = (e) => {
+    setInputValue(e.target.value);
+    setSearchValue(e.target.value);
+  };
+
+  const handleFilter = (item) => {
+    if (item !== "Filter by Region") {
+      setSelectValue(item);
+      setFilterValue(item);
+    } else {
+      setSelectValue("");
+      setFilterValue("");
+    }
   };
 
   return (
     <StyledDiv theme={theme}>
       <div className="list">
         <div className="list__search">
-          <input type="text" placeholder="Search for a country..." />
+          <input
+            value={inputValue}
+            name="search"
+            onChange={handleSearch}
+            type="text"
+            placeholder="Search for a country..."
+          />
 
           <div className="list__search--right-align">
-            <button className="dropbtn">Filter by Region</button>
+            <button className="dropbtn">
+              {selectValue ? selectValue : "Filter by Region"}
+            </button>
             <div className="dropContent">
-              <button>Germany</button>
-              <button>Nigeria</button>
-              <button>Germany</button>
-              <button>Nigeria</button>
-              <button>Germany</button>
-              <button>Nigeria</button>
-              <button>Germany</button>
-              <button>Nigeria</button>
-              <button>Germany</button>
-              <button>Nigeria</button>
+              {region.length &&
+                region.map((item) => (
+                  <button onClick={() => handleFilter(item)}>{item}</button>
+                ))}
             </div>
             <i className="fa fa-chevron-down"></i>
           </div>
@@ -49,7 +75,7 @@ const Countries = ({ countryList, theme }: ICountriesProp) => {
 
         <div className="list__countries">
           {currentItem.map((country: { country: ICountry }, index: number) => (
-            <Card index={index} country={country} theme={theme} />
+            <Card country={country} index={index} />
           ))}
         </div>
       </div>
@@ -182,14 +208,15 @@ const StyledDiv = styled.div`
         border: none;
         box-shadow: 0px 1px 10px 0px rgba(147, 146, 146, 0.5);
         border-radius: 0.5rem;
+        outline: none;
         background: ${(props) =>
           props.theme === "light"
             ? "var(--primary-color-light)"
             : "var(--secondary-dark)"};
         color: ${(props) =>
           props.theme === "light"
-            ? "var(--primary-color-light)"
-            : "var(--primary-color-dark)"};
+            ? "var(--primary-color-dark)"
+            : "var(--primary-color-light)"};
       }
 
       input::placeholder {

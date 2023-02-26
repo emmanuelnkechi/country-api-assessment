@@ -18,5 +18,4 @@ export interface INavProp {
 export interface ICardProp {
   country: ICountry;
   index: number;
-  theme: string;
 }

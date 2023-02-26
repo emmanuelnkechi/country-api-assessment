@@ -1,18 +1,20 @@
+import React from "react";
 import styled from "styled-components";
-import { INavProp } from "../model/common.interface";
+import { ThemeContext } from "../context/themeContext";
 
-const Nav = ({ clickEvent, theme }: INavProp) => {
+const Nav = () => {
+  const { theme, toggleTheme } = React.useContext(ThemeContext);
   return (
     <StyledDiv theme={theme}>
       <div className="nav">
         <div className="nav__header">Where in the World?</div>
         {theme === "light" ? (
-          <div className="nav__icon" onClick={clickEvent}>
+          <div className="nav__icon" onClick={toggleTheme}>
             <i className="fa fa-moon-o"></i>
             <span>Dark Mode</span>
           </div>
         ) : (
-          <div className="nav__icon" onClick={clickEvent}>
+          <div className="nav__icon" onClick={toggleTheme}>
             <i className="fa fa-sun-o"></i>
             <span>Light Mode</span>
           </div>

@@ -1,10 +1,13 @@
+import React from "react";
 import styled from "styled-components";
-import Flag from "../assets/flag.png";
-import { ICountry, ICardProp } from "../model/common.interface";
+import { ICardProp } from "../model/common.interface";
+import { ThemeContext } from "../context/themeContext";
 
-const Countries = ({ index, country, theme }: ICardProp) => {
+const Countries = ({ index, country }: ICardProp) => {
+  const { theme } = React.useContext(ThemeContext);
+
   return (
-    <StyledCard key={index} theme={theme}>
+    <StyledCard key={`section${index}`} theme={theme}>
       <div className="country">
         <div className="country__flag">
           <img src={country?.flags?.png} alt="flag" />

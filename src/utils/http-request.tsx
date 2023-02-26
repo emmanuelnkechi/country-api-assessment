@@ -4,8 +4,8 @@ import { baseURL } from "../constants/url";
 export const apiGet = async (url: string) => {
   try {
     const response = await axios.get(`${baseURL}/${url}`);
-    return response.data;
+    return response;
   } catch (err) {
-    console.error(err);
+    return err;
   }
 };
