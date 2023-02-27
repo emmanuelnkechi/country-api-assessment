@@ -4,4 +4,4 @@ export const url = {
   FILTER_REGIONS: "region",
 };
 
-export const baseURL = "https://restcountries.com/v3.1";
+export const baseURL = "https://restcountries.com/v2/";

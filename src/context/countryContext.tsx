@@ -16,6 +16,7 @@ const CountryProvider: React.FC<React.ReactNode> = ({ children }) => {
       const response = await apiGet(url.GET_ALL_COUNTRIES);
       if (response.status === 200) {
         setCountries(response.data);
+        localStorage.setItem("countries", JSON.stringify(response.data));
         const res = getRegions(response.data);
         setRegion(res);
       }

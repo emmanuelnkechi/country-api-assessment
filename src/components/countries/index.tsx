@@ -5,6 +5,7 @@ import { ICountry } from "../../model/common.interface";
 import Pagination from "../pagination";
 import { CountryContext } from "../../context/countryContext";
 import { ThemeContext } from "../../context/themeContext";
+import { Link } from "react-router-dom";
 
 const Countries = () => {
   const [itemOffset, setItemOffset] = useState(0);
@@ -64,7 +65,7 @@ const Countries = () => {
               {selectValue ? selectValue : "Filter by Region"}
             </button>
             <div className="dropContent">
-              {region.length &&
+              {region.length > 0 &&
                 region.map((item) => (
                   <button onClick={() => handleFilter(item)}>{item}</button>
                 ))}
@@ -75,7 +76,9 @@ const Countries = () => {
 
         <div className="list__countries">
           {currentItem.map((country: { country: ICountry }, index: number) => (
-            <Card country={country} index={index} />
+            <Link to={`/details/${country?.alpha3Code}`} key={index}>
+              <Card country={country} />
+            </Link>
           ))}
         </div>
       </div>
@@ -100,6 +103,10 @@ const StyledDiv = styled.div`
       grid-template-columns: 1fr 1fr 1fr 1fr;
       gap: 4rem;
       margin-top: 4rem;
+
+      a {
+        text-decoration: none;
+      }
     }
 
     &__search {
