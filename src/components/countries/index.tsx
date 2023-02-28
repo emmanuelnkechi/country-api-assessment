@@ -16,8 +16,15 @@ const Countries = () => {
   const itemsPerPage = 12;
   const endOffset = itemOffset + itemsPerPage;
 
-  const { countries, region, setSearchValue, setFilterValue, loading } =
-    React.useContext(CountryContext);
+  const {
+    countries,
+    region,
+    setSearchValue,
+    setFilterValue,
+    loading,
+    showDropDown,
+    setShowDropDown,
+  } = React.useContext(CountryContext);
 
   const { theme } = React.useContext(ThemeContext);
 
@@ -49,7 +56,7 @@ const Countries = () => {
   };
 
   return (
-    <StyledDiv theme={theme}>
+    <StyledDiv theme={theme} className={showDropDown} id="country-container">
       {!loading && (
         <div>
           <div className="list">
@@ -59,17 +66,29 @@ const Countries = () => {
                 name="search"
                 onChange={handleSearch}
                 type="text"
+                id="search"
                 placeholder="Search for a country..."
               />
 
-              <div className="list__search--right-align">
-                <button className="dropbtn">
+              <div
+                className="list__search--right-align"
+                onClick={() => setShowDropDown(!showDropDown)}
+              >
+                <button
+                  className="dropbtn"
+                  onClick={() => setShowDropDown(!showDropDown)}
+                >
                   {selectValue ? selectValue : "Filter by Region"}
                 </button>
                 <div className="dropContent">
                   {region.length > 0 &&
                     region.map((item: string) => (
-                      <button onClick={() => handleFilter(item)}>{item}</button>
+                      <button
+                        data-testid={item}
+                        onClick={() => handleFilter(item)}
+                      >
+                        {item}
+                      </button>
                     ))}
                 </div>
                 <i className="fa fa-chevron-down"></i>
@@ -79,7 +98,12 @@ const Countries = () => {
             {countries.length > 0 ? (
               <div className="list__countries">
                 {currentItem.map((country: ICountry, index: number) => (
-                  <Link to={`/details/${country?.alpha3Code}`} key={index}>
+                  <Link
+                    to={`/details/${country?.alpha3Code}`}
+                    data-testid={country.name}
+                    key={index}
+                    id="card-details"
+                  >
                     <Card country={country} />
                   </Link>
                 ))}
@@ -93,7 +117,11 @@ const Countries = () => {
         </div>
       )}
 
-      {loading && <div className="fallback">Loading...</div>}
+      {loading && (
+        <div className="fallback" id="loading">
+          Loading...
+        </div>
+      )}
     </StyledDiv>
   );
 };
@@ -183,6 +211,7 @@ const StyledDiv = styled.div`
           box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
           z-index: 1;
           border-radius: 0.5rem;
+          display: ${(props) => (props.className ? "block" : "none")};
 
           button {
             color: black;
@@ -219,11 +248,11 @@ const StyledDiv = styled.div`
           }
         }
 
-        &:hover {
-          .dropContent {
-            display: block;
-          }
-        }
+        // &:active {
+        //   .dropContent {
+        //     display: block;
+        //   }
+        // }
       }
 
       input {

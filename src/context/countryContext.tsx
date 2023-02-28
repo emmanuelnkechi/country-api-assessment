@@ -11,6 +11,7 @@ const CountryProvider: React.FC<ContextProps> = ({ children }) => {
   const [region, setRegion] = React.useState<string[]>([]);
   const [searchValue, setSearchValue] = React.useState("");
   const [filterValue, setFilterValue] = React.useState("");
+  const [showDropDown, setShowDropDown] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
 
   const getCountries = async () => {
@@ -68,7 +69,9 @@ const CountryProvider: React.FC<ContextProps> = ({ children }) => {
     if (searchValue) {
       searchCountries();
     } else {
-      getCountries();
+      if (countries.length > 0) {
+        getCountries();
+      }
     }
   }, [searchValue]);
 
@@ -76,7 +79,9 @@ const CountryProvider: React.FC<ContextProps> = ({ children }) => {
     if (filterValue) {
       filterByRegion();
     } else {
-      getCountries();
+      if (countries.length > 0) {
+        getCountries();
+      }
     }
   }, [filterValue]);
 
@@ -88,6 +93,8 @@ const CountryProvider: React.FC<ContextProps> = ({ children }) => {
         setSearchValue,
         setFilterValue,
         loading,
+        showDropDown,
+        setShowDropDown,
       }}
     >
       {children}

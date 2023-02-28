@@ -27,7 +27,7 @@ const CountryDetails = ({}) => {
     <StyledDetails theme={theme}>
       <div className="details">
         <div className="details__navigation-button">
-          <Link to="/">
+          <Link to="/" id="back-link">
             <i className="fa fa-arrow-left"> </i>
             <span>Back</span>
           </Link>
@@ -38,7 +38,7 @@ const CountryDetails = ({}) => {
             <img src={singleCountry[0]?.flag} alt="flag" />
           </div>
           <div className="details__content-description">
-            <h5>{singleCountry[0]?.name}</h5>
+            <h5 className="country-name">{singleCountry[0]?.name}</h5>
 
             <div className="details__country-info">
               <div className="details__country-info--left">
@@ -89,7 +89,11 @@ const CountryDetails = ({}) => {
                   <div className="borders">
                     {singleCountry[0].borders.map(
                       (border: string, index: number) => (
-                        <Link to={`/details/${border}`} key={index}>
+                        <Link
+                          to={`/details/${border}`}
+                          key={index}
+                          data-testid={border}
+                        >
                           {border}
                         </Link>
                       )
@@ -187,6 +191,7 @@ const StyledDetails = styled.div`
       }
       .borders {
         display: flex;
+        flex-wrap: wrap;
       }
 
       a {

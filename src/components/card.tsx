@@ -26,7 +26,8 @@ const Countries = ({ country }: CardProp) => {
 
             <div>
               {" "}
-              <span>Region:</span> <span>{country?.region}</span>
+              <span>Region:</span>{" "}
+              <span className="region">{country?.region}</span>
             </div>
 
             <div>
