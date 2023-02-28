@@ -1,7 +1,15 @@
+import React from "react";
 import ReactPaginate from "react-paginate";
 import styled from "styled-components";
+import { ThemeContext } from "../context/themeContext";
 
-const Pagination = ({ pageCount, handlePageClick, theme }) => {
+type PaginationProp = {
+  pageCount: number;
+  handlePageClick: (e: any) => void;
+};
+
+const Pagination = ({ pageCount, handlePageClick }: PaginationProp) => {
+  const { theme } = React.useContext(ThemeContext);
   return (
     <StyledPagination theme={theme}>
       <ReactPaginate

@@ -2,23 +2,25 @@ import React from "react";
 import styled from "styled-components";
 import { Link, useParams } from "react-router-dom";
 import { ThemeContext } from "../../context/themeContext";
+import { ICountry, ICurrency, ILanguage } from "../../model/common.interface";
 
 const CountryDetails = ({}) => {
   const params = useParams();
 
   const { theme } = React.useContext(ThemeContext);
 
-  const data = JSON.parse(localStorage.getItem("countries"));
+  const data = JSON.parse(localStorage.getItem("countries")!);
 
   const singleCountry = data.filter(
-    (country) => country.alpha3Code === params.countryCode.toUpperCase()
+    (country: ICountry) =>
+      country.alpha3Code === params?.countryCode?.toUpperCase()
   );
 
   const listOfCurrencies = singleCountry[0]?.currencies
-    .map((currency) => currency.name)
+    .map((currency: ICurrency) => currency.name)
     .join(", ");
   const listOfLanguages = singleCountry[0]?.languages
-    .map((language) => language.name)
+    .map((language: ILanguage) => language.name)
     .join(", ");
 
   return (
@@ -85,11 +87,13 @@ const CountryDetails = ({}) => {
                 <div className="details__country-border">
                   <div className="border-label">Border Countries:</div>
                   <div className="borders">
-                    {singleCountry[0].borders.map((border, index) => (
-                      <Link to={`/details/${border}`} key={index}>
-                        {border}
-                      </Link>
-                    ))}
+                    {singleCountry[0].borders.map(
+                      (border: string, index: number) => (
+                        <Link to={`/details/${border}`} key={index}>
+                          {border}
+                        </Link>
+                      )
+                    )}
                   </div>
                 </div>
               )}

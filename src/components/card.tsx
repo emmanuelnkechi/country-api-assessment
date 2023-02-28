@@ -1,9 +1,13 @@
 import React from "react";
 import styled from "styled-components";
-import { ICardProp } from "../model/common.interface";
+import { ICountry } from "../model/common.interface";
 import { ThemeContext } from "../context/themeContext";
 
-const Countries = ({ country }: ICardProp) => {
+type CardProp = {
+  country: ICountry;
+};
+
+const Countries = ({ country }: CardProp) => {
   const { theme } = React.useContext(ThemeContext);
 
   return (
@@ -13,7 +17,7 @@ const Countries = ({ country }: ICardProp) => {
           <img src={country?.flags?.png} alt="flag" />
         </div>
         <div className="country__info">
-          <h4>{country?.name?.common}</h4>
+          <h4>{country?.name}</h4>
           <div className="country__country-details">
             <div>
               {" "}

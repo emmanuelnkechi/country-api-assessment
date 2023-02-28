@@ -2,16 +2,19 @@ import * as React from "react";
 import { apiGet } from "../utils/http-request";
 import { url } from "../constants/url";
 import { getRegions } from "../utils/data-service";
+import { ContextProps } from "../model/common.interface";
 
 export const CountryContext = React.createContext<any | null>(null);
 
-const CountryProvider: React.FC<React.ReactNode> = ({ children }) => {
+const CountryProvider: React.FC<ContextProps> = ({ children }) => {
   const [countries, setCountries] = React.useState([]);
-  const [region, setRegion] = React.useState([]);
+  const [region, setRegion] = React.useState<string[]>([]);
   const [searchValue, setSearchValue] = React.useState("");
   const [filterValue, setFilterValue] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
 
   const getCountries = async () => {
+    setLoading(true);
     try {
       const response = await apiGet(url.GET_ALL_COUNTRIES);
       if (response.status === 200) {
@@ -19,9 +22,11 @@ const CountryProvider: React.FC<React.ReactNode> = ({ children }) => {
         localStorage.setItem("countries", JSON.stringify(response.data));
         const res = getRegions(response.data);
         setRegion(res);
+        setLoading(false);
       }
     } catch (e) {
       console.error(e);
+      setLoading(false);
     }
   };
 
@@ -82,6 +87,7 @@ const CountryProvider: React.FC<React.ReactNode> = ({ children }) => {
         region,
         setSearchValue,
         setFilterValue,
+        loading,
       }}
     >
       {children}

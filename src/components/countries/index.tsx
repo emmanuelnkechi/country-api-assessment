@@ -16,7 +16,7 @@ const Countries = () => {
   const itemsPerPage = 12;
   const endOffset = itemOffset + itemsPerPage;
 
-  const { countries, region, setSearchValue, setFilterValue } =
+  const { countries, region, setSearchValue, setFilterValue, loading } =
     React.useContext(CountryContext);
 
   const { theme } = React.useContext(ThemeContext);
@@ -28,17 +28,17 @@ const Countries = () => {
     setPageCount(getPageCount);
   }, [countries, itemOffset]);
 
-  const handlePageClick = (event) => {
-    const newOffset = (event.selected * itemsPerPage) % countries.length;
+  const handlePageClick = (e: any) => {
+    const newOffset = (e.selected * itemsPerPage) % countries.length;
     setItemOffset(newOffset);
   };
 
-  const handleSearch = (e) => {
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
     setSearchValue(e.target.value);
   };
 
-  const handleFilter = (item) => {
+  const handleFilter = (item: string) => {
     if (item !== "Filter by Region") {
       setSelectValue(item);
       setFilterValue(item);
@@ -50,44 +50,50 @@ const Countries = () => {
 
   return (
     <StyledDiv theme={theme}>
-      <div className="list">
-        <div className="list__search">
-          <input
-            value={inputValue}
-            name="search"
-            onChange={handleSearch}
-            type="text"
-            placeholder="Search for a country..."
-          />
+      {!loading && (
+        <div>
+          <div className="list">
+            <div className="list__search">
+              <input
+                value={inputValue}
+                name="search"
+                onChange={handleSearch}
+                type="text"
+                placeholder="Search for a country..."
+              />
 
-          <div className="list__search--right-align">
-            <button className="dropbtn">
-              {selectValue ? selectValue : "Filter by Region"}
-            </button>
-            <div className="dropContent">
-              {region.length > 0 &&
-                region.map((item) => (
-                  <button onClick={() => handleFilter(item)}>{item}</button>
-                ))}
+              <div className="list__search--right-align">
+                <button className="dropbtn">
+                  {selectValue ? selectValue : "Filter by Region"}
+                </button>
+                <div className="dropContent">
+                  {region.length > 0 &&
+                    region.map((item: string) => (
+                      <button onClick={() => handleFilter(item)}>{item}</button>
+                    ))}
+                </div>
+                <i className="fa fa-chevron-down"></i>
+              </div>
             </div>
-            <i className="fa fa-chevron-down"></i>
+
+            {countries.length > 0 ? (
+              <div className="list__countries">
+                {currentItem.map((country: ICountry, index: number) => (
+                  <Link to={`/details/${country?.alpha3Code}`} key={index}>
+                    <Card country={country} />
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <div className="fallback">There are no countries available.</div>
+            )}
           </div>
-        </div>
 
-        <div className="list__countries">
-          {currentItem.map((country: { country: ICountry }, index: number) => (
-            <Link to={`/details/${country?.alpha3Code}`} key={index}>
-              <Card country={country} />
-            </Link>
-          ))}
+          <Pagination pageCount={pageCount} handlePageClick={handlePageClick} />
         </div>
-      </div>
+      )}
 
-      <Pagination
-        pageCount={pageCount}
-        handlePageClick={handlePageClick}
-        theme={theme}
-      />
+      {loading && <div className="fallback">Loading...</div>}
     </StyledDiv>
   );
 };
@@ -96,6 +102,17 @@ const StyledDiv = styled.div`
   padding: 4rem 6rem;
   background: ${(props) =>
     props.theme === "light" ? "var(--primary-white)" : "var(--primary-dark)"};
+
+  .fallback {
+    margin-top: 4rem;
+    text-align: center;
+    font-weight: 500;
+    font-size: 1.8rem;
+    color: ${(props) =>
+      props.theme === "light"
+        ? "var(--primary-color-dark)"
+        : "var(--primary-color-light)"};
+  }
 
   .list {
     &__countries {
